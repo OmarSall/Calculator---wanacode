@@ -4,31 +4,28 @@ let operator = null;
 let isResultDisplayed = false;
 
 function appendNumber(number) {
-  if (isResultDisplayed) {
-    currentInput = "";
-    isResultDisplayed = false;
+  if (number === ".") {
+    const lastNumber = currentInput.split(" ").pop();
+    if (lastNumber.includes(".")) {
+        return;
+    }
+    if (lastNumber === "") {
+        number = "0.";
+    }
   }
   currentInput += number;
   updateDisplay();
 }
 
-function setOperator(op) {  
+function setOperator(chosenOperator) {  
   if (currentInput === "" && previousInput === "") {
     return;
   }
 
-  if (isResultDisplayed) {
-    previousInput = currentInput;
-    currentInput = "";
-    operator = op;
-    updateDisplay();
-    isResultDisplayed = false;
-    return;
-  }
 
   if (/[\+\-\*/] $/.test(currentInput)) {
-    currentInput = currentInput.slice(0, -2) + op + " ";
-    operator = op;
+    currentInput = currentInput.slice(0, -2) + chosenOperator + " ";
+    operator = chosenOperator;
     updateDisplay();
     return;
   }
@@ -37,21 +34,21 @@ function setOperator(op) {
     calculate();
   }
 
-  operator = op;
+  operator = chosenOperator;
   previousInput = currentInput;
-  currentInput += " " + op + " ";
+  currentInput += " " + chosenOperator + " ";
   updateDisplay();
 }
 
 function calculate() {
-  let parts = currentInput.split(" ");
+  const parts = currentInput.split(" ");
 
   if (parts.length < 3) {
     return;
   }
 
-  let num1 = parseFloat(parts[0]);
-  let num2 = parseFloat(parts[2]);
+  const num1 = parseFloat(parts[0]);
+  const num2 = parseFloat(parts[2]);
   let result;
 
   if (isNaN(num1) || isNaN(num2)) {
